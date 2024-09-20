@@ -62,7 +62,7 @@
                   </header>
                   <div class="channel-info">
                     <div class="logo">
-                      <img src="{{ config.extra.telegram_channel.logo | safe }}" alt="Logo">
+                      <img src="{{ get_url(path=config.extra.telegram_channel.logo) | safe }}" alt="Logo">
                     </div>
                     <div class="stats">
                       Telegram Channel: <a href="https://t.me/{{ config.extra.telegram_channel.id }}" target="_blank">@{{ config.extra.telegram_channel.id }}</a><br>

@@ -4,6 +4,10 @@ compile_sass = true
 # description = "A robust, elegant dark theme"
 generate_feeds = true
 
+[markdown]
+highlight_code = true
+highlight_theme = "charcoal"
+
 [extra]
 author = "Author Name"
 after_dark_menu = [{ url = "$BASE_URL", name = "Home" }]

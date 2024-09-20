@@ -49,3 +49,7 @@ span.spoiler {
   content: "====================================================================================================";
   color: #ccc;
 }
+
+div[itemprop="articleBody"] {
+  margin-bottom: 2.5rem;
+}

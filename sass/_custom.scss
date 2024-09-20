@@ -8,15 +8,24 @@ p.center-images {
   }
 }
 
+
 span.spoiler {
   border-radius: 5%;
   background-color: gray;
   color: gray;
   transition: all 200ms;
 
+  strong {
+    color: gray;
+  }
+
   &:hover {
     background-color: unset;
     color: unset;
+
+    strong {
+      color: unset;
+    }
   }
 }
 

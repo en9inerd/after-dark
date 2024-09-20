@@ -1,0 +1,66 @@
+{% macro meta(page) %}
+    <svg class="icon i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    {% if page.date %}Published: {{ page.date | date(format="%F") }}{% endif %}
+{% endmacro meta %}
+
+{% macro page_in_list(page) %}
+    <article itemscope itemtype="http://schema.org/CreativeWork">
+        <header>
+            <h2 itemprop="name">
+                <a href="{{ "https://t.me/" ~ config.extra.telegram_channel.id ~ "/" ~ page.slug | safe }}">{{ page.title }}</a>
+            </h2>
+            <span class="muted">{{ self::meta(page=page) }}</span>
+        </header>
+        {%- if page.extra.images -%}
+            <p class="center-images">
+                {%- for image in page.extra.images -%}
+                <img src="{{ page.colocated_path ~ image | safe }}" alt="{{ page.title }}" />
+                {%- endfor -%}
+            </p>
+        {%- endif -%}
+        <div itemprop="articleBody">
+            {{ page.content | safe }}
+        </div>
+    </article>
+{% endmacro page_in_list %}
+
+{%- macro getNumOfSubscribers() %}
+{%- set token = get_env(name="TELEGRAM_BOT_TOKEN") %}
+{%- set url = "https://api.telegram.org/bot" ~ token ~ "/getChatMemberCount?chat_id=@" ~ config.extra.telegram_channel.id %}
+{%- set response = load_data(url=url, format="json") %}
+{%- if response.ok %}
+{{- response.result -}}
+{%- endif %}
+{%- endmacro getNumOfSubscribers %}
+
+{%- macro getChannelInfo(prop) %}
+{%- set token = get_env(name="TELEGRAM_BOT_TOKEN") %}
+{%- set url = "https://api.telegram.org/bot" ~ token ~ "/getChat?chat_id=@" ~ config.extra.telegram_channel.id %}
+{%- set response = load_data(url=url, format="json") %}
+{%- if response.ok and response.result[prop] %}
+{{- response.result[prop] -}}
+{%- endif %}
+{%- endmacro getChannelInfo %}
+
+{%- macro getTitle() %}
+{%- set title = self::getChannelInfo(prop="title") %}
+{%- if title %}
+{{- title -}}
+{%- elif config.title %}
+{{- config.title -}}
+{%- endif %}
+{%- endmacro getTitle %}
+
+{%- macro getDescription() %}
+{%- set description = self::getChannelInfo(prop="description") %}
+{%- if description %}
+{{- description -}}
+{%- elif config.description %}
+{{- config.description -}}
+{%- endif %}
+{%- endmacro getDescription %}

@@ -1,6 +1,6 @@
 # after-dark
 
-![after-dark screenshot](https://github.com/getzola/after-dark/blob/master/screenshot.png?raw=true)
+> This fork is adapted for [zola-post-bot](https://github.com/en9inerd/zola-post-bot) and is not intended for general use.
 
 ## Contents
 

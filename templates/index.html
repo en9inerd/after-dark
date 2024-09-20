@@ -1,8 +1,12 @@
-{% import "post_macros.html" as post_macros %}
-
+{%- import "macros.html" as macros %}
+{%- set section = get_section(path="posts/_index.md") %}
+{%- set memberCount = macros::getNumOfSubscribers() %}
+{%- set title = macros::getTitle() %}
+{%- set description = macros::getDescription() %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
+      <link rel="shortcut icon" href="{{ get_url(path="favicon.ico") | safe }}" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -12,17 +16,18 @@
     {% if page %}
       {% if page.description %}
       <meta name="description" content="{{ page.description }}" />
-      {% elif config.description %}
-      <meta name="description" content="{{ config.description }}" />
+      {% elif description %}
+      <meta name="description" content="{{ description }}" />
       {% endif %}
-    {% elif config.description %}
-      <meta name="description" content="{{ config.description }}" />
+    {% elif description %}
+      <meta name="description" content="{{ description }}" />
     {% endif %}
+    {% include "partials/google-analytics.html" -%}
 
-      <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+      <title>{%- block title %}{{ title }}{%- endblock title %}</title>
 
       {% if config.generate_feed %}
-        <link rel="alternate" type={% if config.feed_filename == "atom.xml" %}"application/atom+xml"{% else %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
+        <link rel="alternate" type="application/atom+xml" title="Atom feed" href="{{ get_url(path="/atom.xml") }}">
       {% endif %}
 
       {% block css %}
@@ -51,13 +56,26 @@
             {% endblock header %}
 
             <main>
-                {% if config.extra.after_dark_title %}
-                    <header>
-                        <h1>{{ config.extra.after_dark_title }}</h1>
-                    </header>
+                {% if title %}
+                  <header>
+                    <h1>{{ title }}</h1>
+                  </header>
+                  <div class="channel-info">
+                    <div class="logo">
+                      <img src="{{ config.extra.telegram_channel.logo | safe }}" alt="Logo">
+                    </div>
+                    <div class="stats">
+                      Telegram Channel: <a href="https://t.me/{{ config.extra.telegram_channel.id }}" target="_blank">@{{ config.extra.telegram_channel.id }}</a><br>
+                      Description: {{ description | linebreaksbr | safe }}<br>
+                      Subscribers: {{ memberCount }}<br>
+                      Posts: {{ section.pages | length }}<br>
+                      Created: {{ config.extra.telegram_channel.created_at | date(format="%B %d, %Y") }}
+                    </div>
+                  </div>
+                  <hr class="divider">
                 {% endif %}
                 {% for page in paginator.pages %}
-                    {{ post_macros::page_in_list(page=page) }}
+                    {{ macros::page_in_list(page=page) }}
                 {% endfor %}
 
                 <nav>

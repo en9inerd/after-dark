@@ -19,7 +19,7 @@
         {%- if page.extra.images -%}
             <p class="center-images">
                 {%- for image in page.extra.images -%}
-                <img src="{{ page.colocated_path ~ image | safe }}" alt="{{ page.title }}" />
+                <img src="{{ page.colocated_path ~ image | safe }}" alt="{{ page.title }}" onclick="openInNewTab(this)" />
                 {%- endfor -%}
             </p>
         {%- endif -%}

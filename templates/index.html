@@ -33,6 +33,7 @@
       {% block css %}
           <link rel="stylesheet" href="{{ get_url(path="site.css", trailing_slash=false) | safe }}">
       {% endblock css %}
+      <script src="{{ get_url(path="js/main.js", trailing_slash=false) | safe }}"></script>
 
       {% block extra_head %}
       {% endblock extra_head %}

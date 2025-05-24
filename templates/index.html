@@ -52,29 +52,25 @@
                                 <span itemprop="name">{{ item.name }}</span></a>
                         {% endfor %}
                         </nav>
+                        <h1 class="title">{% if title %}{{ title }}{% endif %}</h1>
                     </header>
                 {% endif %}
             {% endblock header %}
 
             <main>
-                {% if title %}
-                  <header>
-                    <h1>{{ title }}</h1>
-                  </header>
-                  <div class="channel-info">
-                    <div class="logo">
-                      <img src="{{ get_url(path=config.extra.telegram_channel.logo) | safe }}" alt="Logo">
-                    </div>
-                    <div class="stats">
-                      Telegram Channel: <a href="https://t.me/{{ config.extra.telegram_channel.id }}" target="_blank">@{{ config.extra.telegram_channel.id }}</a><br>
-                      Description: {{ description | linebreaksbr | safe }}<br>
-                      Subscribers: {{ memberCount }}<br>
-                      Posts: {{ section.pages | length }}<br>
-                      Created: {{ config.extra.telegram_channel.created_at | date(format="%B %d, %Y") }}
-                    </div>
+                <div class="channel-info">
+                  <div class="logo">
+                    <img src="{{ get_url(path=config.extra.telegram_channel.logo) | safe }}" alt="Logo">
                   </div>
-                  <hr class="divider">
-                {% endif %}
+                  <div class="stats">
+                    Telegram Channel: <a href="https://t.me/{{ config.extra.telegram_channel.id }}" target="_blank">@{{ config.extra.telegram_channel.id }}</a><br>
+                    Description: {{ description | linebreaksbr | safe }}<br>
+                    Subscribers: {{ memberCount }}<br>
+                    Posts: {{ section.pages | length }}<br>
+                    Created: {{ config.extra.telegram_channel.created_at | date(format="%B %d, %Y") }}
+                  </div>
+                </div>
+                <hr class="divider">
                 {% for page in paginator.pages %}
                     {{ macros::page_in_list(page=page) }}
                 {% endfor %}

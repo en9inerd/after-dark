@@ -14,7 +14,7 @@
             <h2 itemprop="name">
                 <a href="{{ "https://t.me/" ~ config.extra.telegram_channel.id ~ "/" ~ page.slug | safe }}">{{ page.title }}</a>
             </h2>
-            <span class="muted">{{ self::meta(page=page) }}</span>
+            <time class="muted">{{ self::meta(page=page) }}</time>
         </header>
         {%- if page.extra.images -%}
             <p class="center-images">

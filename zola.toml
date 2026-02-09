@@ -5,8 +5,8 @@ compile_sass = true
 generate_feeds = true
 
 [markdown]
-highlight_code = true
-highlight_theme = "charcoal"
+[markdown.highlighting]
+theme = "dark-plus"
 
 [extra]
 author = "Author Name"

@@ -1,87 +1,100 @@
 # after-dark
 
-> This fork is adapted for [zola-post-bot](https://github.com/en9inerd/zola-post-bot) and is not intended for general use.
+> A fork of the [after-dark](https://github.com/getzola/after-dark) Zola theme, adapted to display Telegram channel posts published via the [PostPal bot](https://github.com/en9inerd/postpal). Not intended for general use.
+
+## Overview
+
+This theme renders a static site from Telegram channel content. During the Zola build, it fetches channel metadata (title, description, subscriber count) from the Telegram Bot API and displays posts with their original images, formatted text, and links back to the Telegram channel.
+
+Key features:
+
+- Pulls channel title, description, and subscriber count from the Telegram Bot API at build time
+- Links each post heading back to its original Telegram message
+- Supports colocated images with click-to-open-in-new-tab behavior
+- Spoiler-styled content support
+- GitHub Pages deployment via GitHub Actions
 
 ## Contents
 
 - [Installation](#installation)
-- [Options](#options)
+- [Configuration](#configuration)
+  - [Telegram channel](#telegram-channel)
   - [Top menu](#top-menu)
-  - [Title](#title)
   - [Author](#author)
+- [Environment variables](#environment-variables)
+- [Deployment](#deployment)
 
 ## Installation
-First download this theme to your `themes` directory:
+
+Add this theme as a submodule (or clone it) into your `themes` directory:
 
 ```bash
 cd themes
-git clone https://github.com/getzola/after-dark.git
+git clone https://github.com/en9inerd/after-dark.git
 ```
-and then enable it in your `config.toml`:
+
+Enable it in your `zola.toml`:
 
 ```toml
 theme = "after-dark"
 ```
 
-This theme requires your index section (`content/_index.md`) to be paginated to work:
+Your index section (`content/_index.md`) must be paginated:
 
 ```toml
 paginate_by = 5
 ```
 
-The posts should therefore be in directly under the `content` folder.
+Posts live under `content/posts/` and are managed automatically by the [PostPal bot](https://github.com/en9inerd/postpal).
 
-The theme requires tags and categories taxonomies to be enabled in your `config.toml`:
+## Configuration
+
+### Telegram channel
+
+The theme requires a `[extra.telegram_channel]` section in `zola.toml`:
 
 ```toml
-taxonomies = [
-    # You can enable/disable RSS
-    {name = "categories", feed = true},
-    {name = "tags", feed = true},
-]
+[extra.telegram_channel]
+created_at = "2024-01-15"
+id = "your_channel_id"
+logo = "logo.jpg"
 ```
-If you want to paginate taxonomies pages, you will need to overwrite the templates
-as it only works for non-paginated taxonomies by default.
 
+- `id` -- the public username of your Telegram channel (without the `@` prefix)
+- `created_at` -- channel creation date, displayed on the homepage
+- `logo` -- path to the channel logo in the `static/` directory
 
-## Options
+### Top menu
 
-### Top-menu
 Set a field in `extra` with a key of `after_dark_menu`:
 
 ```toml
 after_dark_menu = [
     {url = "$BASE_URL", name = "Home"},
-    {url = "$BASE_URL/categories", name = "Categories"},
-    {url = "$BASE_URL/tags", name = "Tags"},
-    {url = "https://google.com", name = "Google"},
 ]
 ```
 
-If you put `$BASE_URL` in a url, it will automatically be replaced by the actual
-site URL.
-
-### Title
-The site title is shown on the homepage. As it might be different from the `<title>`
-element that the `title` field in the config represents, you can set the `after_dark_title`
-instead.
+`$BASE_URL` is automatically replaced with the actual site URL.
 
 ### Author
-You can set this on a per page basis or in the config file.
 
-`config.toml`:
+Set the author in `zola.toml`:
+
 ```toml
 [extra]
-author = "John Smith"
+author = "Author Name"
 ```
-In a page (wrap this in +++):
-```toml
-title = "..."
-date = 1970-01-01
 
-[extra]
-author = "John Smith"
-```
+## Environment variables
+
+The theme requires the following environment variable at build time:
+
+- `TELEGRAM_BOT_TOKEN` -- the Telegram Bot API token used to fetch channel metadata (title, description, subscriber count)
+
+## Deployment
+
+A GitHub Actions workflow (`.github/workflows/docs.yml`) is included to build and deploy the site to GitHub Pages on every push to `master`.
 
 ## Original
-This template is based on the Hugo template https://git.habd.as/comfusion/after-dark
+
+This template is based on the [after-dark](https://github.com/getzola/after-dark) Zola theme, originally ported from the Hugo template by [comfusion](https://git.habd.as/comfusion/after-dark/).

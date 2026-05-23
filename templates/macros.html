@@ -12,7 +12,11 @@
     <article itemscope itemtype="http://schema.org/CreativeWork">
         <header>
             <h2 itemprop="name">
-                <a href="{{ "https://t.me/" ~ config.extra.telegram_channel.id ~ "/" ~ page.slug | safe }}">{{ page.title }}</a>
+                {% if not page.extra.no_telegram_link %}
+                    <a href="{{ "https://t.me/" ~ config.extra.telegram_channel.id ~ "/" ~ page.slug | safe }}">{{ page.title }}</a>
+                {% else %}
+                    {{ page.title }}
+                {% endif %}
             </h2>
             <time class="muted">{{ self::meta(page=page) }}</time>
         </header>
@@ -30,20 +34,24 @@
 {% endmacro page_in_list %}
 
 {%- macro getNumOfSubscribers() %}
-{%- set token = get_env(name="TELEGRAM_BOT_TOKEN") %}
+{%- set token = get_env(name="TELEGRAM_BOT_TOKEN", default="") %}
+{%- if token %}
 {%- set url = "https://api.telegram.org/bot" ~ token ~ "/getChatMemberCount?chat_id=@" ~ config.extra.telegram_channel.id %}
 {%- set response = load_data(url=url, format="json") %}
 {%- if response.ok %}
 {{- response.result -}}
 {%- endif %}
+{%- endif %}
 {%- endmacro getNumOfSubscribers %}
 
 {%- macro getChannelInfo(prop) %}
-{%- set token = get_env(name="TELEGRAM_BOT_TOKEN") %}
+{%- set token = get_env(name="TELEGRAM_BOT_TOKEN", default="") %}
+{%- if token %}
 {%- set url = "https://api.telegram.org/bot" ~ token ~ "/getChat?chat_id=@" ~ config.extra.telegram_channel.id %}
 {%- set response = load_data(url=url, format="json") %}
 {%- if response.ok and response.result[prop] %}
 {{- response.result[prop] -}}
+{%- endif %}
 {%- endif %}
 {%- endmacro getChannelInfo %}
 
